@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>AnonChat {% block title %}{% endblock %}</title>
+        <link rel="shortcut icon" type="image/png" href="/static/graphics/logo.png"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        <link rel="stylesheet" href="/static/core.css">
+        {% block css %}{% endblock %}
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        {% block js %}
+
+        {% endblock %}
+
+        <script>
+            $(document).ready(function () {
+                $('#loader')[0].classList.remove('loading')
+            })
+        </script>
+    </head>
+    <body>
+        <div id="loader" class="loader loading">
+            <div id='loading-message' class="loading-message">Just a bit...</div>
+            <div class="circles">
+                <div class="circle circle-one"></div>
+                <div class="circle circle-two"></div>
+                <div class="circle circle-three"></div>
+            </div>
+        </div>
+        <navbar class="nav">
+            <div class="nav-left">
+                <div>
+                    <a href="/">
+                        <img src="/static/graphics/logo.png" class="nav-icon" alt="AnonChat Logo">
+                    </a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <a class="nav-button" href="https://sadashi.tech/" target="_blank">About me</a>
+            </div>
+        </navbar>
+        <main>
+            {% block main %}
+            {% endblock %}
+        </main>
+        <footer class="foot"></footer>
+    </body>
+</html>

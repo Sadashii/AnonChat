@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block title %}| Chatroom | {{ name }}{% endblock %}
+{% block js %}
+    <script>
+        $(document).ready(function() {
+         const socket = io("http://127.0.0.1:5000/room")
+
+         socket.on('connect', function () {
+             socket.emit("join", {username: localStorage.getItem('name'), room: '{{ name }}' })
+             $('#loader')[0].classList.remove('loading')
+             console.log('Socket connected!')
+         })
+         socket.on('disconnect', function() {
+             $('#loading-message')[0].innerText = "Reconnecting..."
+             $('#loader')[0].classList.add('loading')
+        })
+         socket.on('member join', function (data) {
+            $("#messages").append(`<div class="message message-alert">${data} just joined the room!</div>`);
+            updateMembers()
+         })
+         socket.on('member leave', function (data) {
+             $("#messages").append(`<div class="message message-alert">${data} just left the room!</div>`);
+             updateMembers()
+         })
+         socket.on('message', function (data) {
+             $("#messages").append(`<div class="message"><span style="color: red;font-weight:bold;">${data.username}: &nbsp; </span><p class="message-content">${data.message}</p></div>`);
+             let message_cont = document.getElementById('messages')
+             message_cont.scrollTop = message_cont.scrollHeight
+         })
+         window.socket = socket
+         $('#name').val(localStorage.getItem('name'))
+        })
+        function changeName(event) {
+            if (!event || event.keyCode == 13) {
+                const content = document.getElementById('name').value
+                socket.emit('changeName', content)
+                updateMembers()
+                localStorage.setItem('name', content)
+            }
+        }
+        function updateMembers() {
+            socket.emit('requestMembers', `{{ name }}`)
+            socket.once('memberResponse', function (data) {
+                const members_cont = document.getElementById('members')
+                members_cont.innerHTML = null
+                for (let i in data) {
+                    let name = data[i]
+                    let block = document.createElement('div')
+                    block.classList.add('message')
+                    block.innerHTML = `${name}`
+                    members_cont.appendChild(block)
+                }
+            })
+        }
+        function sendMessage(event) {
+            if (!event || event.keyCode == 13) {
+                const content = document.getElementById('message').value
+                socket.send({
+                    username: localStorage.getItem('name'),
+                    message: content
+                })
+
+                const message = document.createElement('div')
+                message.classList.add('message')
+                message.innerHTML = `<span style="color: blue;font-weight:bold;">You: &nbsp; </span><p class="message-content">${content}</p>`;
+                document.getElementById('messages').appendChild(message)
+                document.getElementById('message').value = '';
+                let message_cont = document.getElementById('messages')
+                message_cont.scrollTop = message_cont.scrollHeight
+            }
+        }
+
+
+    </script>
+{% endblock %}
+{% block main %}
+    <div class="chatroom-container"><div class="chatroom">
+        <div class="message-container">
+            <div class="room-info">
+                <div>
+                    <h2>Room name: {{ name }}</h2>
+                </div>
+                <div>
+                    <button onclick="window.location.href='/'" class="room-actions"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hammer" viewBox="0 0 16 16"><path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5.009 5.009 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334z"></path></svg></button>
+                    <button onclick="toastr.success('For now, share them the rooms name to join');toastr.success('Feature yet to be finished!')" class="room-actions"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16"><path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path><path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/></svg></button>
+                </div>
+            </div>
+            <div id="messages" class="messages"></div>
+            <div class="message-input">
+                <input onkeydown="sendMessage(event)" id="message" type="text" placeholder="I'm a beautiful butterfly">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+        <div class="message-container" style="width: 40%;border-right: none">
+            <div class="room-info">
+                <h2>Room members</h2>
+            </div>
+            <div id="members" class="messages members-list"></div>
+            <div class="message-input">
+                <input onkeydown="changeName(event)" type="text" id="name">
+                <button onclick="changeName()">Change name</button>
+            </div>
+        </div>
+    </div></div>
+{% endblock %}

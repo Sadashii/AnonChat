@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% block title %}| Home{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+    const getStarted = () => {
+        const image = document.getElementById("homepage-right-image")
+        image.classList.toggle("hide")
+
+        const form = document.getElementById("homepage-right-form")
+        form.classList.toggle("hide")
+        form.scrollTo()
+    }
+
+    function openTab(tabName) {
+      let i, tabcontent;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+
+      document.getElementById(tabName).style.display = "block";
+    }
+
+
+    function createChatroom(data) {
+        let name = document.getElementsByName('name')[0].value
+        if (!name) {
+            name = Math.random().toString(36).substring(2,12);
+        }
+        localStorage.setItem('name', name)
+        const room_name = document.getElementsByName('rname')[0].value
+        window.location.href = `/room/${encodeURI(room_name.toLowerCase())}`
+	}
+
+     $(document).ready(function() {
+         const socket = io("http://127.0.0.1:5000")
+         socket.on('connect', function () {
+             console.log('Socket connected!')
+         })
+         window.socket = socket
+
+         $("#name").val(localStorage.getItem('name'))
+         $("#rname").val(Math.random().toString(36).substring(2,12))
+     })
+    </script>
+
+{% endblock %}
+{% block main %}
+    <div class="home">
+        <div class="content">
+            <h1 class="title">AnonChat</h1>
+            <p>The latest generation chat client where you can chat anonymously, make chatroom, or even start a lifelong conversation with your loved once.</p>
+            <button class="get-started" onclick="getStarted();openTab('Chatroom')">
+                Get started
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"></path>
+</svg>
+            </button>
+        </div>
+        <div class="homepage-right-container">
+            <div id="homepage-right-image" class="shown"><img src="/static/graphics/homepage1.jpg" alt="Homepage Image"></div>
+            <div id="homepage-right-form" class="hide">
+                <div class="tab">
+                  <button onclick="openTab('Chatroom')" id="defaultOpen">Chatrooms</button>
+                </div>
+
+                <div id="Chatroom" class="tabcontent">
+                    <form>
+                        <div>
+                            <label for="name">Your name: </label>
+                            <input id="name" name="name" placeholder="Your name">
+                        </div>
+                        <div>
+                            <label for="name">Room name: </label>
+                            <input id='rname' name="rname" placeholder="Room name">
+                        </div>
+                    </form>
+                    <div>
+                        <button onclick="createChatroom(this)">Chat</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

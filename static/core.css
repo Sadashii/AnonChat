@@ -1,0 +1,329 @@
+*, body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    transition: all 0.3s;
+}
+
+/* Navbar */
+.nav {
+    height: 60px;
+    padding: 0 10vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav .nav-icon {
+    height: 40px;
+}
+.nav .nav-button {
+    color: black;
+    text-decoration: none;
+    padding: 10px 20px;
+    transition: all 300ms;
+    font-weight: bolder;
+}
+.nav .nav-button:hover {
+    border-radius: 10px;
+    background-color: #ece8dc;
+}
+
+/* Preloader */
+.loader {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: #fdf1e7;
+    flex-direction: column;
+    align-items: center;
+    display: none;
+    justify-content: center;
+}
+.loading {
+    display: flex;
+    z-index: 999 !important;
+}
+.loading-message {
+    font-size: 46px;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+.circles {
+    display: inline-flex;
+}
+.circle {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin: 0 10px;
+}
+.circle-one {
+    animation: circleAnim 1.5s infinite;
+    background-color: #F5C945;
+}
+.circle-two {
+    animation: circleAnim 1.5s infinite;
+    animation-delay: 0.5s;
+        background-color: #52c78b;
+}
+.circle-three {
+    animation: circleAnim 1.5s infinite;
+    animation-delay: 1s;
+    background-color: #5297F4;
+}
+@keyframes circleAnim {
+    0% {transform: scale(1)}
+    50% {transform: scale(1.5)}
+    100% {transform: scale(1)}
+}
+
+/* Home page */
+.home {
+    padding: 0 10vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.home .content {
+    max-width: 30vw;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.home h1 {
+    font-size: 40px;
+    padding-bottom: 2rem;
+}
+.home p {
+    color: gray;
+    font-size: 18px;
+    padding-bottom: 2rem;
+}
+.home .get-started {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background: #52c78b;
+    background: linear-gradient(135deg, #52c78b, #2cd388);
+    transition: all 300ms;
+}
+.home .get-started svg {
+    margin-left: 7px;
+}
+.home .get-started:hover {
+    padding: 14px 50px;
+    border: 1px solid black;
+}
+.home .homepage-right-container {
+    margin-left: auto;
+    width: 50vw;
+    height: calc(100vh - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.home .homepage-right-container img {
+    max-height: calc(80vh - 60px);
+    border-radius: 30%;
+    max-width: 50vw;
+}
+.home .homepage-right-container .remove {
+    animation: remove 500s infinite;
+}
+.home .homepage-right-container .hide {
+  	opacity: 0;
+    position: absolute;
+    z-index: -1;
+}
+.home #homepage-right-form {
+    background-color: #f3f2f3;
+    border-radius: 15px;
+    box-shadow: 0 0 5px 2px #ccc;
+    padding: 15px;
+}
+
+/* Form tabs */
+.tab {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    min-width: 25vw;
+}
+.tab button {
+    border: 1px solid #9a9a9a;
+    border-radius: 15px;
+    outline: none;
+    cursor: pointer;
+    padding: 6px 16px;
+    margin: 5px 10px;
+    font-size: 1rem;
+}
+.tab button:hover {
+  background-color: #ddd;
+}
+.tabcontent {
+    padding: 25px 15px;
+}
+.tabcontent form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.tabcontent input {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid #9a9a9a;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.tabcontent button {
+    padding: 10px 35px;
+    font-size: 17px;
+    margin-right: 15px;
+    margin-top: 25px;
+    border-radius: 10px;
+    transition: all 300ms;
+    color: black;
+    border: 3px solid #52c78b;
+}
+.tabcontent button:hover {
+    color: white;
+    background-color: #52c78b;
+}
+
+/* Chatrooms */
+.chatroom-container {
+    padding: 0 10vw;
+}
+.chatroom {
+    width: calc(60vw);
+    margin: auto;
+    height: 80vh;
+    background-color: #f3f2f3;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+}
+.message-container {
+    width: 80%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid black;
+}
+.message-alert {
+    font-weight: bolder;
+}
+.message {
+    display: inline-flex;
+    margin-top: 5px;
+}
+.message-container .messages {
+    height: 75%;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.chatroom .message-input {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 0;
+}
+.chatroom .message-input button {
+    padding: 10px 25px;
+    border-radius: 10px;
+    margin-left: 15px;
+}
+.chatroom .message-input input {
+    width: 100%;
+    padding: 10px 23px;
+    border-radius: 10px;
+    border: none;
+}
+.members-list div::before {
+    content: '';
+    margin-right: 15px;
+    width: 3px;
+    transform: rotate(90deg);
+    border-radius: 5px;
+    box-shadow: 0 0 3px 3px #52c78b;
+}
+.room-info {
+    display: inline-flex;
+    justify-content: space-between;
+}
+.room-info .room-actions {
+    border: none;
+    margin-left: 10px;
+    transition: all 300ms;
+    padding: 7px;
+}
+.room-info .room-actions:hover {
+    background-color: #52c78b;
+}
+
+/* Media */
+@media screen and (max-width: 1000px) {
+    /* Home */
+    .home {
+        display: flex;
+        flex-direction: column;
+    }
+    /* Chatroom */
+    .chatroom-container {
+        padding: 0 5vw;
+    }
+    .chatroom {
+        width: 80vw;
+    }
+    .chatroom .message-input input {
+        padding: 10px 13px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    /* Home */
+    .home {
+        align-items: center;
+    }
+    .home .content {
+        max-width: 70vw;
+    }
+    .home .homepage-right-container {
+        margin-left: 0;
+        min-width: 100vw;
+        margin-top: 40vh !important;
+    }
+    .home .homepage-right-container img {
+        min-width: 250px;
+    }
+
+    /* Chatroom */
+    .chatroom-container {
+        padding: 0;
+    }
+    .chatroom {
+        width: calc(100vw - 17px);
+        height: auto;
+        flex-direction: column;
+    }
+    .chatroom .message-container {
+        width: calc(100% - 30px) !important;
+        border-right: none;
+    }
+    .chatroom .message-container:first-child {
+        border-bottom: 3px solid black;
+        height: calc(100vh - 90px) !important;
+    }
+    .chatroom .message-container .messages {
+        padding-left: 10px;
+    }
+}
