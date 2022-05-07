@@ -1,14 +1,25 @@
 {% extends "layout.html" %}
 {% block title %}| Chatroom | {{ name }}{% endblock %}
+{% block css %}
+        <link rel="stylesheet" href="/static/room.css">
+{% endblock %}
 {% block js %}
     <script>
         $(document).ready(function() {
-         const socket = io("http://127.0.0.1:5000/room")
+          if (!localStorage.getItem('name')) {
+              let name;
+              do {
+                  name = prompt('Please enter your username:');
+              } while (!name);
+              localStorage.setItem('name', name);
+          }
+
+         const socket = io(`${window.location.origin}/room`)
 
          socket.on('connect', function () {
              socket.emit("join", {username: localStorage.getItem('name'), room: '{{ name }}' })
              $('#loader')[0].classList.remove('loading')
-             console.log('Socket connected!')
+             console.log('Connected to server...')
          })
          socket.on('disconnect', function() {
              $('#loading-message')[0].innerText = "Reconnecting..."
@@ -24,15 +35,15 @@
          })
          socket.on('message', function (data) {
              $("#messages").append(`<div class="message"><span style="color: red;font-weight:bold;">${data.username}: &nbsp; </span><p class="message-content">${data.message}</p></div>`);
-             let message_cont = document.getElementById('messages')
+             let message_cont = $("#messages")
              message_cont.scrollTop = message_cont.scrollHeight
          })
          window.socket = socket
          $('#name').val(localStorage.getItem('name'))
         })
         function changeName(event) {
-            if (!event || event.keyCode == 13) {
-                const content = document.getElementById('name').value
+            if (!event || event.keyCode == 13 && $('#name').val()) {
+                const content = $('#name').val()
                 socket.emit('changeName', content)
                 updateMembers()
                 localStorage.setItem('name', content)
@@ -70,28 +81,39 @@
             }
         }
 
-
+        const shareChatroom = () => {
+            navigator.clipboard.writeText(window.location.href)
+            toastr.success('Link copied to clipboard!')
+        }
     </script>
 {% endblock %}
 {% block main %}
-    <div class="chatroom-container"><div class="chatroom">
+    <div class="chatroom">
         <div class="message-container">
             <div class="room-info">
                 <div>
                     <h2>Room name: {{ name }}</h2>
                 </div>
                 <div>
-                    <button onclick="window.location.href='/'" class="room-actions"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hammer" viewBox="0 0 16 16"><path d="M9.972 2.508a.5.5 0 0 0-.16-.556l-.178-.129a5.009 5.009 0 0 0-2.076-.783C6.215.862 4.504 1.229 2.84 3.133H1.786a.5.5 0 0 0-.354.147L.146 4.567a.5.5 0 0 0 0 .706l2.571 2.579a.5.5 0 0 0 .708 0l1.286-1.29a.5.5 0 0 0 .146-.353V5.57l8.387 8.873A.5.5 0 0 0 14 14.5l1.5-1.5a.5.5 0 0 0 .017-.689l-9.129-8.63c.747-.456 1.772-.839 3.112-.839a.5.5 0 0 0 .472-.334z"></path></svg></button>
-                    <button onclick="toastr.success('For now, share them the rooms name to join');toastr.success('Feature yet to be finished!')" class="room-actions"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16"><path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path><path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/></svg></button>
+                    <button onclick="window.location.href='/'" class="room-actions">
+                        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M19,3H5C3.89,3 3,3.89 3,5V9H5V5H19V19H5V15H3V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M10.08,15.58L11.5,17L16.5,12L11.5,7L10.08,8.41L12.67,11H3V13H12.67L10.08,15.58Z"></path>
+                        </svg>
+                    </button>
+                    <button onclick="shareChatroom()" class="room-actions">
+                        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
             <div id="messages" class="messages"></div>
             <div class="message-input">
-                <input onkeydown="sendMessage(event)" id="message" type="text" placeholder="I'm a beautiful butterfly">
+                <input onkeydown="sendMessage(event)" id="message" type="text" placeholder="I'm a beautiful butterfly...">
                 <button onclick="sendMessage()">Send</button>
             </div>
         </div>
-        <div class="message-container" style="width: 40%;border-right: none">
+        <div class="message-container">
             <div class="room-info">
                 <h2>Room members</h2>
             </div>
@@ -101,5 +123,5 @@
                 <button onclick="changeName()">Change name</button>
             </div>
         </div>
-    </div></div>
+    </div>
 {% endblock %}

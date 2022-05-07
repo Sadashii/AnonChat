@@ -20,9 +20,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-        {% block js %}
-
-        {% endblock %}
+        {% block js %}{% endblock %}
 
         <script>
             $(document).ready(function () {
@@ -32,7 +30,7 @@
     </head>
     <body>
         <div id="loader" class="loader loading">
-            <div id='loading-message' class="loading-message">Just a bit...</div>
+            <div id='loading-message' class="loading-message">Setting everything up...</div>
             <div class="circles">
                 <div class="circle circle-one"></div>
                 <div class="circle circle-two"></div>
@@ -48,7 +46,7 @@
                 </div>
             </div>
             <div class="nav-right">
-                <a class="nav-button" href="https://sadashi.tech/" target="_blank">About me</a>
+                <a class="nav-button" href="https://sadashi.tech/" target="_blank">About Me</a>
             </div>
         </navbar>
         <main>
