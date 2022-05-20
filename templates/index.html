@@ -40,7 +40,7 @@
          window.socket = socket
 
          $("#name").val(localStorage.getItem('name'))
-         $("#rname").val(Math.random().toString(36).substring(2,12))
+         $("#rname").val(Math.random().toString(36).substring(2,14))
      })
     </script>
 
@@ -71,7 +71,7 @@
                             <input id="name" name="name" placeholder="Your name">
                         </div>
                         <div>
-                            <label for="name">Roomname: </label>
+                            <label for="name">Room name: </label>
                             <input id='rname' name="rname" placeholder="Room name">
                         </div>
                     </form>

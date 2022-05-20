@@ -113,6 +113,7 @@
     background: #52c78b;
     background: linear-gradient(135deg, #52c78b, #2cd388);
     transition: all 300ms;
+    cursor: pointer;
 }
 .home .get-started svg {
     margin-left: 7px;
@@ -192,6 +193,7 @@
     transition: all 300ms;
     color: black;
     border: 3px solid #52c78b;
+    cursor: pointer;
 }
 .tabcontent button:hover {
     color: white;
@@ -208,17 +210,21 @@
 }
 
 @media screen and (max-width: 767px) {
+    body {
+        overflow: hidden;
+    }
     /* Home */
     .home {
         align-items: center;
     }
     .home .content {
         max-width: 70vw;
+        top: 35%;
     }
     .home .homepage-right-container {
         margin-left: 0;
         min-width: 100vw;
-        margin-top: 40vh !important;
+        margin-top: 20vh !important;
     }
     .home .homepage-right-container img {
         min-width: 250px;
